@@ -175,6 +175,12 @@ fn deserialize_fielded_enum() {
         &Bar::D,
         &[Token::Seq { len: None }, Token::U16(9), Token::SeqEnd],
     );
+
+    // Because of the `other` attribute, `D` will deserialize as any unknown discriminant
+    assert_de_tokens(
+        &Bar::D,
+        &[Token::Seq { len: None }, Token::U16(700), Token::SeqEnd],
+    );
 }
 
 #[derive(DeserializeWithDiscriminant, SerializeWithDiscriminant, Debug, PartialEq)]
