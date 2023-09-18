@@ -241,6 +241,30 @@ fn deserialize_generic_fielded_enum() {
 
 #[derive(DeserializeWithDiscriminant, SerializeWithDiscriminant, Debug, PartialEq)]
 #[repr(u32)]
+#[serde(rename = "Lolo")]
+enum Qux {
+    A = 3,
+    B = 9,
+}
+
+#[test]
+fn serialize_renamed_enum() {
+    assert_ser_tokens(
+        &Qux::A,
+        &[
+            Token::Struct {
+                name: "Lolo",
+                len: 1,
+            },
+            Token::Str("discriminant"),
+            Token::U32(3),
+            Token::StructEnd,
+        ],
+    );
+}
+
+#[derive(DeserializeWithDiscriminant, SerializeWithDiscriminant, Debug, PartialEq)]
+#[repr(u32)]
 enum CrazyGenerics<'a, const S: usize> {
     B(PhantomData<(&'a (), [(); S])>) = 9,
 }

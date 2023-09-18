@@ -49,3 +49,4 @@ This enum will first serialize / deserialize its discriminant value (a `u16`) th
 
  - `other` this makes it so any unknown discriminant deserializes as this given
    variant
+ - `rename` the container attribute. This lets you rename the enum.
