@@ -78,12 +78,12 @@ fn type_with_generics(ident: &Ident, generics: &Generics) -> Type {
 
 fn generate_deserialize(
     self_ident: Ident,
+    self_ser_name: String,
     self_generics: Generics,
     en: DataEnum,
     int_type: Ident,
 ) -> Result<ItemImpl> {
     let self_: Type = type_with_generics(&self_ident, &self_generics);
-    let self_name = self_ident.to_string();
 
     let mut arms: Vec<Arm> = vec![];
 
@@ -91,7 +91,7 @@ fn generate_deserialize(
         _ => ::std::result::Result::Err(serde::de::Error::custom(
             ::std::format!(
                 "unexpected value {disc:?} for {}",
-                #self_name
+                #self_ser_name
             )
         ))
     };
@@ -179,7 +179,7 @@ fn generate_deserialize(
                     fn expecting(
                         &self, formatter: &mut ::std::fmt::Formatter
                     ) -> ::std::fmt::Result {
-                        ::std::fmt::Formatter::write_str(formatter, #self_name)
+                        ::std::fmt::Formatter::write_str(formatter, #self_ser_name)
                     }
 
                     fn visit_seq<A>(
@@ -199,7 +199,7 @@ fn generate_deserialize(
 
                 ::serde::de::Deserializer::deserialize_struct(
                     deserializer,
-                    #self_name,
+                    #self_ser_name,
                     &["disc", "value"],
                     Visitor(::std::marker::PhantomData)
                 )
@@ -228,7 +228,10 @@ fn generate_where_clause(self_generics: &Generics, bound: TypeParamBound) -> Whe
 fn deserialize_with_discriminant_inner(input: DeriveInput) -> Result<ItemImpl> {
     if let Data::Enum(en) = input.data {
         let int_type = find_repr(&input.attrs)?;
-        generate_deserialize(input.ident, input.generics, en, int_type)
+        let ser_name = find_rename(&input.attrs)?
+            .map(|n| n.value())
+            .unwrap_or_else(|| input.ident.to_string());
+        generate_deserialize(input.ident, ser_name, input.generics, en, int_type)
     } else {
         Err(Error::new(
             input.ident.span(),
