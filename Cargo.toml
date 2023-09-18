@@ -4,6 +4,8 @@ version = "0.1.1"
 edition = "2021"
 description = "derive macro for enums"
 license = "MIT"
+repository = "https://github.com/bobbobbio/serde_dis"
+homepage = "https://github.com/bobbobbio/serde_dis"
 
 [lib]
 proc-macro = true
