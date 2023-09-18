@@ -1,5 +1,7 @@
 // copyright 2023 Remi Bernotavicius
 
+#![doc = include_str!("../README.md")]
+
 use proc_macro::TokenStream;
 use proc_macro2::Span;
 use quote::quote;
