@@ -18,12 +18,12 @@ Here are some examples
 
 This enum will be serialized / deserialized as a u32
 ```Rust
-  #[derive(DeserializeWithDiscriminant, SerializeWithDiscriminant, Debug, PartialEq)]                    
-  #[repr(u32)]                                                                                           
-  enum Foo {                                                                                             
-      A = 1,                                                                                             
-      B = 2,                                                                                             
-      C = 3,                                                                                             
+  #[derive(DeserializeWithDiscriminant, SerializeWithDiscriminant, Debug, PartialEq)]
+  #[repr(u32)]
+  enum Foo {
+      A = 1,
+      B = 2,
+      C = 3,
   }
 ```
 
@@ -31,16 +31,21 @@ It also supports enums with fields
 
 This enum will first serialize / deserialize its discriminant value (a `u16`) then any fields
 ```Rust
-  #[derive(DeserializeWithDiscriminant, SerializeWithDiscriminant, Debug, PartialEq)]                 
-  #[repr(u16)]                                                                                        
-  enum Bar {                                                                                          
-      A(String) = 1,                                                                                  
-      B {                                                                                             
-          a: i32,                                                                                     
-          b: u32,                                                                                     
-      } = 12,                                                                                         
-      C(i32, u64) = 7,                                                                                
-      #[serde(other)]                                                                                 
-      D = 9,                                                                                          
-  }                                                                                                   
+  #[derive(DeserializeWithDiscriminant, SerializeWithDiscriminant, Debug, PartialEq)]
+  #[repr(u16)]
+  enum Bar {
+      A(String) = 1,
+      B {
+          a: i32,
+          b: u32,
+      } = 12,
+      C(i32, u64) = 7,
+      #[serde(other)]
+      D = 9,
+  }
 ```
+
+## supported `serde` attributes
+
+ - `other` this makes it so any unknown discriminant deserializes as this given
+   variant
