@@ -1,0 +1,20 @@
+[package]
+name = "serde_dis"
+version = "0.1.1"
+edition = "2021"
+description = "derive macro for enums"
+license = "MIT"
+
+[lib]
+proc-macro = true
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+proc-macro2 = "^1"
+syn = { version = "^2", features = ["full"] }
+quote = "^1"
+
+[dev-dependencies]
+serde = "^1"
+serde_test = "^1"
